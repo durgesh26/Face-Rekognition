@@ -13,6 +13,7 @@ Face Detection API use AWS Face-Rekognition API to detect face from the image. Y
 - In these application we are using the Face analysis option and image is choose from the local machine and is then store in s3 bucket to use to detect and face and get the analysis face detected.
 
 ## Installation
-- 
- 
-
+- To run this project you have to install postman  
+```
+https://www.postman.com/downloads/
+```
