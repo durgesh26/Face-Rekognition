@@ -5,6 +5,8 @@ Face Detection API use AWS Face-Rekognition API to detect face from the image. Y
 ## Table of contents
 * [AWS Face-Rekognition API description](#aws-face-rekognition-api-description)
 * [Installation](#installation)
+* [Input type](#input-type)
+* [How to use API](#how-to-use-api)
 
 
 ## AWS Face-Rekognition API description
@@ -16,4 +18,14 @@ Face Detection API use AWS Face-Rekognition API to detect face from the image. Y
 - To run this project you have to install postman  
 ```
 https://www.postman.com/downloads/
+```
+
+## Input type
+- To run this project you have to provide the image file as an input. Image file with the extention .jpeg, .jpg, .png is acceptable. If you provide any other input type such as .txt, .docx , .ppt is not acceptable and will throw error.
+
+## How to use API
+- You have two ways in order to excess Face Detection API:
+1. You can directly copy and paste the url below to the google search
+```
+http://104.131.184.70:3000/docs
 ```
