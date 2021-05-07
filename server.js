@@ -3,18 +3,23 @@ const express = require('express');
 const AWS = require('aws-sdk');
 const multer = require('multer');
 const app = express();
-const port = 8001;
+const port = 3000;
 const swaggerJsdoc = require('swagger-jsdoc');
 const swaggerUi = require('swagger-ui-express');
 const cors = require('cors');
 const axios = require('axios').default;
 const uuid = require('uuid').v4;
 
+var filetype = ["png","jpg","jpeg"];
+
 //code to initialize aws S3 bucket with the access key and secret key
-const s3 = new AWS.S3({
-	accessKeyId: "AKIAQ4QSFQVEFTNEHKTZ",
-	secretAccessKey: "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"
-})
+AWS.config.update({
+    accessKeyId: 'AKIAQ4QSFQVEFTNEHKTZ',
+    secretAccessKey: '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',
+    region: 'us-east-2'
+});
+
+var s3 = new AWS.S3({ apiVersion: '2006-03-01' });
 
 // code to store the file in memory storage using multer
 const storage = multer.memoryStorage({
@@ -35,7 +40,7 @@ const options = {
 			version: '1.0.0',
 			description: 'Test Face Rekognition API to detect face from the image and analysis image',
 		},
-		host: '167.99.230.251:3000',
+		host: 'localhost:3000',
 		basePath:'/',
 	},
 	apis: ['./server.js'],
@@ -49,32 +54,95 @@ app.use(cors());
 app.use(express.urlencoded({extended:true}));
 app.use(express.json());
 
-
+ /**
+ * @swagger
+ * /upload:
+ *     post:
+ *       description: upload image file for face detection and analysis
+ *       operationId: "uploadFile"
+ *       consumes:
+ *          - "multipart/form-data"
+ *       produces:
+ *          - application/json
+ *       parameters:
+ *          - name: "image"
+ *            in: "formData"
+ *            description: "file name of image"
+ *            required: true
+ *            type: "file"
+ *       responses:
+ *          200:
+ *            description: image uploaded succesfully
+ */
 
 //code to upload image to s3 bucket with the endpoint bucket
 app.post('/upload',upload, (req,res) => {
 
 	let myFile = req.file.originalname.split(".");
-	const fileType = myFile[myFile.length -1];
-
-	const params = {
-		Bucket: "facerekognition01",
-		Key: `${uuid()}.${fileType}`,
-		Body: req.file.buffer 
-	}
-	//code to upload image to s3 bucket
-	s3.upload(params, (err,data) => {
-		if(err){
-			res.status(500).send(err);
-		}else{
-			res.status(200).send(data);
+	var fileType = myFile[myFile.length -1].toLowerCase();
+	
+	console.log(fileType);
+	let isFileType = false;
+	for(var i =0 ; i < filetype.length; i++){
+		if(fileType === filetype[i]){
+			console.log("isFiletype is true");
+			const params = {
+				Bucket: "facerekognition01",
+				Key: `${uuid()}.${fileType}`,
+				Body: req.file.buffer 
+			}
+			//code to upload image to s3 bucket
+			s3.upload(params, (err,data) => {
+				if(err){
+					res.status(500).send(err);
+				}else{
+					res.status(200).send(data.Key);
+					
+					
+				}
+			});
+			isFileType = true;
 		}
-	})
+	}
+	if(!isFileType){
+		res.status(500).json({message: "please upload the image with file type: jpeg, png, jpg"});
+	}
+	
 });
+
+
+
+ /**
+ * @swagger
+ * /detect:
+ *     get:
+ *       description: return face analysis data of the face detected from the image provided
+ *       produces:
+ *          - application/json
+ *       parameters:
+ *        - name: key
+ *          in: query
+ *          desciption: agent_code
+ *          required: true
+ *          type: string
+ *       responses:
+ *          200:
+ *              description: orders table display
+ */
+
 
 //code to detect face from the image on the endpoint /detect
 app.get('/detect', (req,res) => {
-	console.log(req.file.originalname)
+	console.log("key params:" + req.query.key);
+	let photo_key = req.query.key;
+	if(!photo_key){
+		res.status(400).json({
+			"error" :{
+				"message" : "Key is required to detect face" 
+			}
+		});
+	}
+	console.log("download: " + photo_key);
 	var params = {
         Bucket: "facerekognition01",
         MaxKeys: 1000
@@ -84,8 +152,42 @@ app.get('/detect', (req,res) => {
 		if(err){
 			res.status(500).send(err);
 		}else{
+			let isPresent = false;
+			for(var i=0;i<data.Contents.length;i++){
+				console.log("both data at a time:  "+data.Contents[i].Key + " " + photo_key);
+				if(photo_key === data.Contents[i].Key){
+					console.log("inside if: " + data.Contents[i].Key);
+					var name = data.Contents[i].Key;
+					var para = {
+						Image: {
+							S3Object: {
+								Bucket: "facerekognition01",
+								Name: name
+							}
+						},
+						Attributes: [
+							"ALL"
+						]
+					}
+
+					const rekognition = new AWS.Rekognition();
+		
+					rekognition.detectFaces(para, function (err, response) {
+						if (err) {
+							console.log(err, err.stack);
+							res.json("error"); // an error occurred
+						} else {
+							res.json(response);
+						}
+					});
+					isPresent = true;
+				}
+			}
 			
-			res.status(200).send(data);
+			if(!isPresent){
+				res.json({message : "Upload is not found in aws s3 bucket"});
+			}
+		
 		}
 	})
 
