@@ -76,7 +76,7 @@ app.use(express.json());
  */
 
 //code to upload image to s3 bucket with the endpoint bucket
-app.post('v1/api/upload',upload, (req,res) => {
+app.post('/upload',upload, (req,res) => {
 
 	let myFile = req.file.originalname.split(".");
 	var fileType = myFile[myFile.length -1].toLowerCase();
@@ -132,7 +132,7 @@ app.post('v1/api/upload',upload, (req,res) => {
 
 
 //code to detect face from the image on the endpoint /detect
-app.get('v1/api/detect', (req,res) => {
+app.get('/detect', (req,res) => {
 	console.log("key params:" + req.query.key);
 	let photo_key = req.query.key;
 	if(!photo_key){
