@@ -1,24 +1,24 @@
 
-const express = require('express');
-const AWS = require('aws-sdk');
-const multer = require('multer');
+const express = require('express'); // expreess library to create server
+const AWS = require('aws-sdk'); // AWS library to get AWS package 
+const multer = require('multer'); // multer middleware use for handling multipart/form-data
 const app = express();
 const port = 3000;
-const swaggerJsdoc = require('swagger-jsdoc');
+const swaggerJsdoc = require('swagger-jsdoc'); // swagger library for Swagger ui
 const swaggerUi = require('swagger-ui-express');
 const cors = require('cors');
-const axios = require('axios').default;
-const uuid = require('uuid').v4;
+const uuid = require('uuid').v4; // uuid library to genrate random unique indentifier generator
 
 var filetype = ["png","jpg","jpeg"];
 
-//code to initialize aws S3 bucket with the access key and secret key
+//code to config AWS with the access key and secret key
 AWS.config.update({
     accessKeyId: 'AKIAQ4QSFQVEFTNEHKTZ',
     secretAccessKey: '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',
     region: 'us-east-2'
 });
 
+//code to initialize AWS S3 bucket with version of the S3 bucket
 var s3 = new AWS.S3({ apiVersion: '2006-03-01' });
 
 // code to store the file in memory storage using multer
@@ -78,6 +78,7 @@ app.use(express.json());
 //code to upload image to s3 bucket with the endpoint bucket
 app.post('/upload',upload, (req,res) => {
 
+
 	let myFile = req.file.originalname.split(".");
 	var fileType = myFile[myFile.length -1].toLowerCase();
 	
@@ -88,7 +89,7 @@ app.post('/upload',upload, (req,res) => {
 			console.log("isFiletype is true");
 			const params = {
 				Bucket: "facerekognition01",
-				Key: `${uuid()}.${fileType}`,
+				Key: `${uuid()}.${fileType}`, //generate random image name using uuid
 				Body: req.file.buffer 
 			}
 			//code to upload image to s3 bucket
@@ -148,6 +149,7 @@ app.get('/detect', (req,res) => {
         MaxKeys: 1000
     }
 
+	// get list of object of the image store in the s3 bucket
 	s3.listObjects(params, function(err,data) {
 		if(err){
 			res.status(500).send(err);
@@ -158,6 +160,7 @@ app.get('/detect', (req,res) => {
 				if(photo_key === data.Contents[i].Key){
 					console.log("inside if: " + data.Contents[i].Key);
 					var name = data.Contents[i].Key;
+					//create paramter to pass for the detectFace function
 					var para = {
 						Image: {
 							S3Object: {
@@ -169,9 +172,10 @@ app.get('/detect', (req,res) => {
 							"ALL"
 						]
 					}
-
+					//code to initialize AWS rekognition api
 					const rekognition = new AWS.Rekognition();
-		
+					
+					//call detectFace from the AWS Rekognition
 					rekognition.detectFaces(para, function (err, response) {
 						if (err) {
 							console.log(err, err.stack);
