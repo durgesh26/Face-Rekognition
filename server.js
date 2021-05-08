@@ -185,7 +185,7 @@ app.get('/detect', (req,res) => {
 			}
 			
 			if(!isPresent){
-				res.json({message : "Upload is not found in aws s3 bucket"});
+				res.json({message : "Upload image is not found in AWS s3 bucket"});
 			}
 		
 		}
@@ -196,5 +196,5 @@ app.get('/detect', (req,res) => {
 
 //code to listen the api at the predefined port
 app.listen(port, () => {
-	console.log('Example app listening at http://localhost:'+port);
+	console.log('Example app listening at http://104.131.184.70:'+port);
 })
