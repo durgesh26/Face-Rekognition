@@ -4,6 +4,7 @@ Face Detection API use AWS Face-Rekognition API to detect face from the image. Y
 
 ## Table of contents
 * [AWS Face-Rekognition API description](#aws-face-rekognition-api-description)
+* [Why to use this API](#why-to-use-this-api)
 * [Installation](#installation)
 * [Input type](#input-type)
 * [How to use API](#how-to-use-api)
@@ -15,6 +16,10 @@ Face Detection API use AWS Face-Rekognition API to detect face from the image. Y
 - Type of analysis provide by AWS Face-Rekognition API are Labels, Face, Custom labels, Text detection, Face search, Celebrities match and many more.
 - In these application we are using the Face analysis option. Image is choose from the local machine and is then store in s3 bucket to use to detect face and get the analysis face detected.
 - In order to detect face from the image "detectFaces" function from the AWS Face-Rekognition API is used. It will take input parameter as bucket name of the AWS S3 bucket and image name store in the bucket.
+
+## Why to use this API
+- With the help of this API you dont have to require any accessKey to operate AWS Face-Rekognition. Only thing  you have to do is to upload your image to get analysis of face.
+- Also with help of this api you will get face details such as  BoundingBox of face, Age Range, Smile, Eyeglasses, Sunglasses, Gender, Beard, Emotions, Mustache, Eyesopen, Landmarks and many such details. With the help of this details you can identify person and you can compare this details with the another image details and also search for the celebrity search.
 
 ## Installation
 - To run this project you have to install postman  
@@ -46,7 +51,7 @@ http://104.131.184.70:3000/docs
   "message": "please upload the image with file type: jpeg, png, jpg"
 }
 ```
-- Copy the randomly genreated image name from the response body.
+- Copy the randomly generated image name from the response body.
 - Now click on the "GET /detect" button.
 - click on the "Try it Out" button and then paste the image name in the input field with the "Key" label and hit on Execute button.
 - You will find the response in json format in the response body. These response is the analysis of the face detected from the image uploaded by the user. Respose is shown below
@@ -123,6 +128,6 @@ http://104.131.184.70:3000/detect
 - ==>Thus, you can use any methods to get the face analysis of the image you upload both will show you the same response.
 
 ## Terms and Conditions
-- When you upload your image to the server, youe image is saved in AWS S3 bucket for the face detection from the image. If you agree with it then only you use this api.
+- When you upload your image to the server, your image is saved in AWS S3 bucket for the face detection from the image. If you agree with it then only you use this api.
 
 
