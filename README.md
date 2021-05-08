@@ -46,7 +46,7 @@ http://104.131.184.70:3000/docs
   "message": "please upload the image with file type: jpeg, png, jpg"
 }
 ```
-- Copy the randomly genreated image name from the response body.
+- Copy the randomly generated image name from the response body.
 - Now click on the "GET /detect" button.
 - click on the "Try it Out" button and then paste the image name in the input field with the "Key" label and hit on Execute button.
 - You will find the response in json format in the response body. These response is the analysis of the face detected from the image uploaded by the user. Respose is shown below
