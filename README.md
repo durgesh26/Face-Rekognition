@@ -25,7 +25,9 @@ https://www.postman.com/downloads/
 
 ## How to use API
 - You have two ways in order to excess Face Detection API:
-1. You can directly copy and paste the url below to the google search
+1. You can directly copy and paste the url below to the new search tab
 ```
 http://104.131.184.70:3000/docs
 ```
+- Swagger UI will open once you visit the above URL as shown below
+-   
