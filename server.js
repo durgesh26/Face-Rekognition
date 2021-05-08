@@ -97,9 +97,8 @@ app.post('/upload',upload, (req,res) => {
 				if(err){
 					res.status(500).send(err);
 				}else{
-					res.status(200).send(data.Key);
-					
-					
+					res.status(200).json({"key" : data.Key});
+				
 				}
 			});
 			isFileType = true;
