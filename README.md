@@ -7,6 +7,7 @@ Face Detection API use AWS Face-Rekognition API to detect face from the image. Y
 * [Installation](#installation)
 * [Input type](#input-type)
 * [How to use API](#how-to-use-api)
+* [Terms and Conditions](#terms-and-conditions)
 
 
 ## AWS Face-Rekognition API description
@@ -119,5 +120,8 @@ http://104.131.184.70:3000/detect
 - Note: If you provide the wrong value in the VALUE field error is genreated.
 
 - ==>Thus, you can use any methods to get the face analysis of the image you upload both will show you the same response.
+
+## Terms and Conditions
+- When you upload your image to the server, youe image is saved in AWS S3 bucket for the face detection from the image. If you agree with it then only you can use this api.
 
 
