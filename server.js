@@ -40,7 +40,7 @@ const options = {
 			version: '1.0.0',
 			description: 'Test Face Rekognition API to detect face from the image and analysis image',
 		},
-		host: '104.131.184.70:3000',
+		host: 'localhost:3000',
 		basePath:'/',
 	},
 	apis: ['./server.js'],
