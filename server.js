@@ -37,7 +37,7 @@ const options = {
 	swaggerDefinition: {
 		info: {
 			title : 'Face Rekognition API',
-			version: '1.1.1',
+			version: '1.0.0',
 			description: 'Test Face Rekognition API to detect face from the image and analysis image',
 		},
 		host: 'localhost:3000',
