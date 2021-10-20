@@ -39,6 +39,7 @@ const options = {
 			title : 'Face Rekognition API',
 			version: '1.0.2',
 			name: 'Durgesh',
+			lastname: 'Patel',
 			description: 'Test Face Rekognition API to detect face from the image and analysis image',
 		},
 		host: 'localhost:3000',
