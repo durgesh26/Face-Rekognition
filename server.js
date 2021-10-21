@@ -41,6 +41,7 @@ const options = {
 			name: 'Durgesh',
 			lastname: 'Patel',
 			address: '12252',
+			zipcode: '28269',
 			description: 'Test Face Rekognition API to detect face from the image and analysis image',
 		},
 		host: 'localhost:3000',
